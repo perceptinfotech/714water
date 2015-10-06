@@ -1,5 +1,3 @@
-/.gitignore
-/.htaccess
 /administrator/cache/*
 /administrator/components/com_admin/*
 /administrator/components/com_ajax/*
@@ -518,8 +516,10 @@
 /templates/protostar/*
 /templates/system/*
 /templates/index.html
-/tmp/*
+/tmp/
 /configuration.php
 /index.php
 /joomla.xml
 /*.txt
+/trantoc/
+/docs/

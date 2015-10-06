@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="plugin" version="2.5.0" group="system" method="upgrade">
+	<name>System - Vinaora Vietnamese Alias</name>
+	<author>VINAORA</author>
+	<creationDate>2012-06-17</creationDate>
+	<copyright>Copyright (C) 2010-2012 VINAORA. All rights reserved.</copyright>
+	<license>GNU General Public License version 2 or later; see LICENSE.txt</license>
+	<authorEmail>info@vinaora.com</authorEmail>
+	<authorUrl>http://vinaora.com</authorUrl>
+	<version>2.5.0</version>
+	<description>PLG_SYSTEM_VINAORA_VIETALIAS_XML_DESCRIPTION</description>
+	<files>
+		<filename>index.html</filename>
+		<filename>helper.php</filename>
+		<filename>output.php</filename>
+		<filename>README.markdown</filename>
+		<filename plugin="vinaora_vietalias">vinaora_vietalias.php</filename>
+	</files>
+	<media folder="media" destination="plg_system_vinaora_vietalias">
+		<filename>index.html</filename>
+		<folder>css</folder>
+		<folder>images</folder>
+		<folder>js</folder>
+	</media>
+	<languages>
+		<language tag="en-GB">language/en-GB.plg_system_vinaora_vietalias.ini</language>
+		<language tag="en-GB">language/en-GB.plg_system_vinaora_vietalias.sys.ini</language>
+		<language tag="vi-VN">language/vi-VN.plg_system_vinaora_vietalias.ini</language>
+		<language tag="vi-VN">language/vi-VN.plg_system_vinaora_vietalias.sys.ini</language>
+	</languages>
+	<config>
+		<fields name="params">
+			<fieldset name="basic">
+				<field name="active_on" type="radio" default="1" label="PLG_SYSTEM_VINAORA_VIETALIAS_FIELD_ACTIVE_ON" description="PLG_SYSTEM_VINAORA_VIETALIAS_FIELD_ACTIVE_ON_DESC" >
+					<option value="1">JYES</option>
+					<option value="0">JNO</option>
+				</field>
+				<field name="active_on_specific" type="textarea" rows="7" cols="30" default="com_content,com_categories,com_menus,com_banners,com_contact,com_newsfeeds,com_weblinks" label="PLG_SYSTEM_VINAORA_VIETALIAS_FIELD_ACTIVE_ON_SPECIFIC" description="PLG_SYSTEM_VINAORA_VIETALIAS_FIELD_ACTIVE_ON_SPECIFIC_DESC" />
+				<field name="auto_complete" type="radio" default="1" label="PLG_SYSTEM_VINAORA_VIETALIAS_FIELD_AUTO_COMPLETE" description="PLG_SYSTEM_VINAORA_VIETALIAS_FIELD_AUTO_COMPLETE_DESC" >
+					<option value="1">JYES</option>
+					<option value="0">JNO</option>
+				</field>
+				<field name="auto_complete_on_specific" type="textarea" rows="7" cols="30" default="com_abc,com_xyz" label="PLG_SYSTEM_VINAORA_VIETALIAS_FIELD_AUTO_COMPLETE_ON_SPECIFIC" description="PLG_SYSTEM_VINAORA_VIETALIAS_FIELD_AUTO_COMPLETE_ON_SPECIFIC_DESC" />
+			</fieldset>
+		</fields>
+	</config>
+</extension>
