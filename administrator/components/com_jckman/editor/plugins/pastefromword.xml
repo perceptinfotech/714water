@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<install version="1.5" type="plugin" plugin="pastefromword" method="upgrade">
+	<version>0.1</version>
+	<creationDate>Feb 2012</creationDate>
+	<author>CKSource.com</author>
+	<authorUrl>http://cksource.com/</authorUrl>
+	<license>GNU/GPLv2</license>
+	<description>PLG_JCK_DESC</description>
+	<languages>
+	</languages>
+	<params group="options">
+		<param name="pasteFromWordCleanupFile" type="filelist" default="default" label="PLG_JCK_PASTEFROMWORD_CLEANUPFILE" description="PLG_JCK_PASTEFROMWORD_CLEANUPFILE_DESC" directory="plugins/editors/jckeditor/plugins/pastefromword/filter" filter="" exclude="" stripext="1"   hide_none="1"  hide_default="1"/>
+		<param name="pasteFromWordNumberedHeadingToList" type="radio" default="0" label="PLG_JCK_CONVERT_NUMBER_HEADINGS_TO_LIST" description="PLG_JCK_CONVERT_NUMBER_HEADINGS_TO_LIST_DESC">
+			<option value="0">No</option>
+			<option value="1">Yes</option>
+		</param>
+		<param name="pasteFromWordPromptCleanup" type="radio" default="0" label="PLG_JCK_ALWAYS_PROMPT_WHEN_PASTING_FROM_MS_WORD" description="PLG_JCK_ALWAYS_PROMPT_WHEN_PASTING_FROM_MS_WORD_DESC">
+			<option value="0">No</option>
+			<option value="1">Yes</option>
+		</param>
+		<param name="pasteFromWordRemoveStyles" type="radio" default="1" label="PLG_JCK_IGNORE_STYLES" description="PLG_JCK_IGNORE_STYLES_DESC">
+			<option value="0">No</option>
+			<option value="1">Yes</option>
+		</param>
+</params>
+</install>
