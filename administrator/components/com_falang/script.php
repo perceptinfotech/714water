@@ -74,11 +74,53 @@ class com_falangInstallerScript
                 $params['component_list'] = $this->installation_params['components']['falang']['component_list'];
                 $this->setParams( $params );
             }
+            //update module params for advance dropdown and show_name value version 2.2.1
+            if (version_compare($this->_previous_version, '2.2.0', 'le')) {
+                $db = JFactory::getDbo();
+                $db->setQuery('SELECT params FROM #__extensions WHERE name = ' . $db->quote('mod_falang'));
+                $params = json_decode($db->loadResult(), true);
+                $params['show_name'] = '0';
+                $params['advanced_dropdown'] = '0';
+                $paramsString = json_encode( $params );
+                $db->setQuery('UPDATE #__extensions SET params = ' .
+                    $db->quote($paramsString) .
+                    ' WHERE name = ' . $db->quote('mod_falang'));
+                $db->query();
+
+                //update module params
+                $query = $db->getQuery(true);
+                $db->getQuery(true);
+                $query->select('id,params')
+                    ->from('#__modules')
+                    ->where('module= "mod_falang"');
+                $db->setQuery($query);
+                $rows =  $db->loadObjectList();
+
+                foreach ($rows as $row) {
+                    $params = json_decode($row->params,true);
+                    $params['show_name'] = '0';
+                    $params['advanced_dropdown'] = '0';
+                    $paramsString = json_encode( $params );
+                    $db->setQuery('UPDATE #__modules SET params = ' .
+                        $db->quote($paramsString) .
+                        ' WHERE id = ' . $row->id);
+                    $db->query();
+                }
+
+            }
+
         }
 
         function preflight($type, $parent)
         {
             $this->_previous_version = $this->getParam('version');
+
+            // abort if the current Joomla release is older
+            if( version_compare(JVERSION, '3.4.0', 'lt') ) {
+                $application = JFactory::getApplication();
+                $application->enqueueMessage(JText::_('COM_FALANG_JOOMLA_TOOOLD_MESSAGE'), 'notice');
+                return false;
+            }
         }
 
         function postflight($type, $parent)
@@ -270,6 +312,21 @@ class com_falangInstallerScript
             $f = JPATH_ROOT.'/'.$folder;
             if(!JFolder::exists($f)) continue;
             JFolder::delete($f);
+        }
+
+        //remove joomla 2.X content element
+        if (version_compare(JVERSION,'3.0.0','<')) {
+            $f = JPATH_ROOT . '/administrator/components/com_falang/contentelements/tags.xml';
+            if (JFile::exists($f)) {
+                JFile::delete($f);
+            }
+        }
+        //remove joomla 3.X content element
+        if (version_compare(JVERSION,'3.4','>=')) {
+            $f = JPATH_ROOT . '/administrator/components/com_falang/contentelements/weblinks.xml';
+            if (JFile::exists($f)) {
+                JFile::delete($f);
+            }
         }
     }
 

@@ -59,11 +59,202 @@ class plgSystemFalangdriver extends JPlugin
         //end fix
     }
 
-    //not implemented
     public function buildRule(&$router, &$uri)
     {
+        $lang = $uri->getVar('lang');
+        $default_lang	= JComponentHelper::getParams('com_languages')->get('site', 'en-GB');
+
+        //we build the route for category list article
+        if ($lang != $default_lang && $uri->getVar('id') != null && $uri->getVar('catid') != null) {
+
+            $fManager = FalangManager::getInstance();
+            $id_lang = $fManager->getLanguageID($lang);
+
+            // Make sure we have the id and the alias
+            if (strpos($uri->getVar('id'), ':') > 0)
+            {
+                list($tmp, $id) = explode(':', $uri->getVar('id'), 2);
+                $db = JFactory::getDbo();
+                $dbQuery = $db->getQuery(true)
+                    ->select('fc.value')
+                    ->from('#__falang_content fc')
+                    ->where('fc.reference_id = '.(int)$tmp)
+                    ->where('fc.language_id = '.(int) $id_lang )
+                    ->where('fc.reference_field = \'alias\'')
+                    ->where('fc.reference_table = \'content\'');
+
+                $db->setQuery($dbQuery);
+                $alias = $db->loadResult();
+                if (isset($alias)) {
+                    $uri->setVar('id',$tmp. ':' . $alias);
+                }
+            }
+            // Make sure we have the id and the alias
+            if (strpos($uri->getVar('catid'), ':') > 0)
+            {
+                list($tmp2, $catid) = explode(':', $uri->getVar('catid'), 2);
+
+                $db = JFactory::getDbo();
+                $dbQuery = $db->getQuery(true)
+                    ->select('fc.value')
+                    ->from('#__falang_content fc')
+                    ->where('fc.reference_id = '.(int)$tmp2)
+                    ->where('fc.language_id = '.(int) $id_lang )
+                    ->where('fc.reference_field = \'alias\'')
+                    ->where('fc.reference_table = \'categories\'');
+
+                $db->setQuery($dbQuery);
+                $alias = $db->loadResult();
+                if (isset($alias)) {
+                    $uri->setVar('catid',$tmp2. ':' . $alias);
+                }
+            }
+        }
+
+        //fix canonical if sef plugin is enabled
+        $sef_plugin = JPluginHelper::getPlugin('system', 'sef');
+        if (!empty($sef_plugin)) {
+            if ($lang != $default_lang && $uri->getVar('id') != null && $uri->getVar('catid') != null) {
+                $fManager = FalangManager::getInstance();
+                $id_lang = $fManager->getLanguageID($lang);
+
+                // Make sure we have the id and the alias
+                if (strpos($uri->getVar('id'), ':') === false)
+                {
+                    //we use id in the query to be translated.
+                    $db = JFactory::getDbo();
+                    $dbQuery = $db->getQuery(true)
+                        ->select('alias,id')
+                        ->from('#__content')
+                        ->where('id=' . (int) $uri->getVar('id'));
+                    $db->setQuery($dbQuery);
+                    $alias = $db->loadResult();
+                    if (isset($alias)) {
+                        $uri->setVar('id',$uri->getVar('id') . ':' . $alias);
+                    }
+                }
+            }
+        }
+
+        //build route for hikashop product
+        if ( $uri->getVar('option') == 'com_hikashop' &&  $uri->getVar('ctrl') == 'product' &&  $uri->getVar('task')== 'show' ) {
+            // on native language look in falang table
+            if ($default_lang != $lang ){
+                $fManager = FalangManager::getInstance();
+                $id_lang = $fManager->getLanguageID($lang);
+                $id = $uri->getVar('cid');
+                $db = JFactory::getDbo();
+                $dbQuery = $db->getQuery(true)
+                    ->select('fc.value')
+                    ->from('#__falang_content fc')
+                    ->where('fc.reference_id = '.(int)$id)
+                    ->where('fc.language_id = '.(int) $id_lang )
+                    ->where('fc.reference_field = \'product_alias\'')
+                    ->where('fc.reference_table = \'hikashop_product\'');
+
+                $db->setQuery($dbQuery);
+                $alias = $db->loadResult();
+                if (isset($alias)) {
+                    $uri->setVar('name', $alias);
+                }
+
+            } else {
+                // translated languague look in native table
+                $id = $uri->getVar('cid');
+                $db = JFactory::getDbo();
+                $dbQuery = $db->getQuery(true)
+                    ->select('product_alias')
+                    ->from('#__hikashop_product')
+                    ->where('product_id = '.(int)$id);
+                $db->setQuery($dbQuery);
+                $alias = $db->loadResult();
+                if (isset($alias)) {
+                    $uri->setVar('name', $alias);
+                }
+            }
+            //
+        }
+        //build route for hikahsop category list
+        if ( $uri->getVar('option') == 'com_hikashop' &&  $uri->getVar('ctrl') == 'category' &&  $uri->getVar('task')== 'listing' ) {
+            // on native language look in falang table
+            if ($default_lang != $lang) {
+                $fManager = FalangManager::getInstance();
+                $id_lang = $fManager->getLanguageID($lang);
+                $id = $uri->getVar('cid');
+                $db = JFactory::getDbo();
+                $dbQuery = $db->getQuery(true)
+                    ->select('fc.value')
+                    ->from('#__falang_content fc')
+                    ->where('fc.reference_id = ' . (int)$id)
+                    ->where('fc.language_id = ' . (int)$id_lang)
+                    ->where('fc.reference_field = \'category_alias\'')
+                    ->where('fc.reference_table = \'hikashop_category\'');
+
+                $db->setQuery($dbQuery);
+                $alias = $db->loadResult();
+                if (isset($alias)) {
+                    $uri->setVar('name', $alias);
+                }
+
+            } else {
+                // translated languague look in native table
+                $id = $uri->getVar('cid');
+                $db = JFactory::getDbo();
+                $dbQuery = $db->getQuery(true)
+                    ->select('category_alias')
+                    ->from('#__hikashop_category')
+                    ->where('category_id = ' . (int)$id);
+                $db->setQuery($dbQuery);
+                $alias = $db->loadResult();
+                if (isset($alias)) {
+                    $uri->setVar('name', $alias);
+                }
+            }
+        }
+        //build route for k2 category list
+        if ( $uri->getVar('option') == 'com_k2' &&  $uri->getVar('view') == 'item' ) {
+            // on native language look in falang table
+            if ($default_lang != $lang ) {
+                $fManager = FalangManager::getInstance();
+                $id_lang = $fManager->getLanguageID($lang);
+
+                // Make sure we have the id and the alias
+                if (strpos($uri->getVar('id'), ':') > 0) {
+                    list($tmp, $id) = explode(':', $uri->getVar('id'), 2);
+                    $db = JFactory::getDbo();
+                    $dbQuery = $db->getQuery(true)
+                        ->select('fc.value')
+                        ->from('#__falang_content fc')
+                        ->where('fc.reference_id = ' . (int)$tmp)
+                        ->where('fc.language_id = ' . (int)$id_lang)
+                        ->where('fc.reference_field = \'alias\'')
+                        ->where('fc.reference_table = \'k2_items\'');
+
+                    $db->setQuery($dbQuery);
+                    $alias = $db->loadResult();
+                    if (isset($alias)) {
+                        $uri->setVar('id', $tmp . ':' . $alias);
+                    }
+                }
+            } else {
+                // translated languague look in native table
+                $id = $uri->getVar('id');
+                list($tmp, $id) = explode(':', $uri->getVar('id'), 2);
+                $db = JFactory::getDbo();
+                $dbQuery = $db->getQuery(true)
+                    ->select('alias')
+                    ->from('#__k2_items')
+                    ->where('id = '.(int)$tmp);
+                $db->setQuery($dbQuery);
+                $alias = $db->loadResult();
+                if (isset($alias)) {
+                    $uri->setVar('id', $tmp . ':' . $alias);
+                }
+            }
+        }
         return array();
     }
+
 
     public function parseRule(&$router, &$uri) {
         static $done = false;

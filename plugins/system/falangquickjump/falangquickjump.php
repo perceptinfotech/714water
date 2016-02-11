@@ -281,16 +281,17 @@ class plgSystemFalangquickjump extends JPlugin
 
         $input = JFactory::getApplication()->input;
         $option = $input->get('option', false, 'cmd');
+        $view = $input->get('view', 'default', 'cmd');
 
         //load supported component
-//        $falangManager = FalangManager::getInstance();
-//        $contentElements = $falangManager->getContentElements();
+        //        $falangManager = FalangManager::getInstance();
+        //        $contentElements = $falangManager->getContentElements();
 
-//        $value = array();
-//        foreach ($contentElements as $contentElement) {
-//            $form = $contentElement->_xmlFile->getElementsByTagName('component')->item(0);
-//            if (isset($form)){$value[]= trim($form->textContent);}
-//        }
+        //        $value = array();
+        //        foreach ($contentElements as $contentElement) {
+        //            $form = $contentElement->_xmlFile->getElementsByTagName('component')->item(0);
+        //            if (isset($form)){$value[]= trim($form->textContent);}
+        //        }
 
         jimport('joomla.application.component.helper');
         $params = JComponentHelper::getParams('com_falang');
@@ -302,37 +303,45 @@ class plgSystemFalangquickjump extends JPlugin
         $mapping=null;
         foreach ($components as $component){
             $map = explode("#",$component);
+            $mapviews = explode(',',$map[3]);
+            $mpvcnt = count($mapviews);
+            $proceed = false;
             if (count($map)>=3 && trim($map[0])==$option){
-                if (count($map)>3 && (count($map)-3)%2==0){
-                    $matched=true;
-                    for ($p=0;$p<(count($map)-3)/2;$p++){
-                        $testParam = JRequest::getVar( trim($map[3+$p*2]), '');
-                        if ((strpos(trim($map[4+$p*2]),"!")!==false && strpos(trim($map[4+$p*2]),"!")==0)){
-                            if ($testParam == substr(trim($map[4+$p*2]),1)){
-                                $matched=false;
-                                break;
+                for($xx=0; $xx<$mpvcnt; $xx++){if($mapviews[$xx] == $view){$proceed = true;}}
+                if($proceed == true){
+                    if (count($map)>3 && (count($map)-3)%2==0){
+                        $matched=true;
+                        for ($p=0;$p<(count($map)-3)/2;$p++){
+                            $testParam = JRequest::getVar( trim($map[3+$p*2]), '');
+                            if ((strpos(trim($map[4+$p*2]),"!")!==false && strpos(trim($map[4+$p*2]),"!")==0)){
+                                if ($testParam == substr(trim($map[4+$p*2]),1)){
+                                    $matched=false;
+                                    break;
+                                }
+                            }
+                            else {
+                                if ($testParam != trim($map[4+$p*2])){
+                                    $matched=false;
+                                    break;
+                                }
                             }
                         }
-                        else {
-                            if ($testParam != trim($map[4+$p*2])){
-                                $matched=false;
-                                break;
-                            }
+                        if ($matched) {
+                            $mapping=$map;
+                            break;
                         }
                     }
-                    if ($matched) {
+                    else {
                         $mapping=$map;
                         break;
                     }
-                }
-                else {
-                    $mapping=$map;
-                    break;
+
                 }
             }
         }
         return $mapping;
     }
+
 
     public function getLanguages(){
         $languages	= JLanguageHelper::getLanguages();

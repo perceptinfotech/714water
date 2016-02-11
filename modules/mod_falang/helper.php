@@ -65,6 +65,15 @@ abstract class modFaLangHelper
 			if ($active) {
 				$associations = MenusHelper::getAssociations($active->id);
 			}
+            //v2.2.0 support component assoication
+            // Load component associations
+            $class = str_replace('com_', '', $app->input->get('option')) . 'HelperAssociation';
+            JLoader::register($class, JPATH_COMPONENT_SITE . '/helpers/association.php');
+
+            if (class_exists($class) && is_callable(array($class, 'getAssociations')))
+            {
+                $cassociations = call_user_func(array($class, 'getAssociations'));
+            }
 		}
    		foreach($languages as $i => &$language) {
 			// Do not display language without frontend UI
@@ -81,6 +90,7 @@ abstract class modFaLangHelper
             $language->active =  $language->lang_code == $lang->getTag();
 
             //since v1.4 change in 1.5 , ex rsform preview don't have active
+            //this method don't set display for component association set after
             if (isset($active)){
                 $language->display = ($active->language == '*' || $language->active)?true:false;
             } else {
@@ -89,14 +99,30 @@ abstract class modFaLangHelper
 
 
             if ($language_filter) {
-                if (isset($associations[$language->lang_code]) && $menu->getItem($associations[$language->lang_code])) {
+                //use component association
+                if (isset($cassociations[$language->lang_code])) {
+                    $language->link = JRoute::_($cassociations[$language->lang_code] . '&lang=' . $language->sef);
+                    //if association existe for this language display flag.
+                    $language->display = true;
+                }elseif (isset($associations[$language->lang_code]) && $menu->getItem($associations[$language->lang_code])) {
+                    //use menu association.
                     $language->display = true;
                     $itemid = $associations[$language->lang_code];
+
+                    //use to have component parameters in case of menu association
+                    $router = JApplication::getRouter();
+                    $tmpuri = clone($uri);
+                    $router->parse($tmpuri);
+                    $vars = $router->getVars();
+                    $vars['lang'] = $language->sef;
+                    $vars['Itemid'] = $itemid;
+                    $url = 'index.php?'.JURI::buildQuery($vars);
+
                     if ($app->getCfg('sef')=='1') {
-                        $language->link = JRoute::_('index.php?lang='.$language->sef.'&Itemid='.$itemid);
+                        $language->link = JRoute::_($url);
                     }
                     else {
-                        $language->link = 'index.php?lang='.$language->sef.'&Itemid='.$itemid;
+                        $language->link = $url;
                     }
                 }
                 else {
@@ -121,8 +147,28 @@ abstract class modFaLangHelper
                          //workaround to fix index language
                          $vars['lang'] = $language->sef;
 
+                        //since 2.2.1
+                        //case of article category view
+                        //set the language used to reload category with the right language
+                        $jfm = FalangManager::getInstance();
+                        if (!empty($vars['view']) && $vars['view'] == 'category'  && !empty($vars['option']) && $vars['option'] == 'com_content') {
+                            if (($language->lang_code != $default_lang) || ($lang->getTag() != $default_lang) ){
+                                JCategories::$instances = array();
+                                $jfm->setLanguageForUrlTranslation($language->lang_code);
+                            }
+                        }
+                        //end since 2.2.1
+
                         //case of category article
-                        if (!empty($vars['view']) && $vars['view'] == 'article' && !empty($vars['option']) && $vars['option'] == 'com_content') {
+                        //set the language used to reload category with the right language
+                        if (!empty($vars['view']) && $vars['view'] == 'article'  && !empty($vars['option']) && $vars['option'] == 'com_content') {
+
+                            //since 2.2.1
+                            if (($language->lang_code != $default_lang) || ($lang->getTag() != $default_lang) ){
+                                JCategories::$instances = array();
+                                $jfm->setLanguageForUrlTranslation($language->lang_code);
+                            }
+                            //end 2.2.1
 
                             if (FALANG_J30){
                                 JModelLegacy::addIncludePath(JPATH_SITE.'/components/com_content/models', 'ContentModel');
@@ -170,8 +216,29 @@ abstract class modFaLangHelper
                                 unset($vars['id']);
                             }
                         }
+
                         $url = 'index.php?'.JURI::buildQuery($vars);
                         $language->link = JRoute::_($url);
+
+
+                        //since 2.2.1
+                        //on restaure les categories pour le cas des liste de categories
+                        if (!empty($vars['view']) && $vars['view'] == 'category'  && !empty($vars['option']) && $vars['option'] == 'com_content') {
+                            if (($language->lang_code != $default_lang) || ($lang->getTag() != $default_lang)) {
+                                JCategories::$instances = array();
+                                $jfm->setLanguageForUrlTranslation(null);
+                            }
+                        }
+
+                        if (!empty($vars['view']) && $vars['view'] == 'article'  && !empty($vars['option']) && $vars['option'] == 'com_content') {
+
+                            if (($language->lang_code != $default_lang) || ($lang->getTag() != $default_lang)) {
+                                JCategories::$instances = array();
+                                $jfm->setLanguageForUrlTranslation(null);
+                            }
+                        }
+                        //end 2.2.1
+
 
                         //TODO check performance 3 queries by languages -1
                         /**

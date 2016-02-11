@@ -16,6 +16,8 @@ class FalangManager {
 
 	public static $instance = null;
 
+	protected static $languageForUrlTranslation = null;
+
 	/** @var array of all known content elements and the reference to the XML file */
 	var $_contentElements;
 
@@ -66,6 +68,19 @@ class FalangManager {
 		// Must get the config here since if I do so dynamically it could be within a translation and really mess things up.
 		$this->componentConfig = JComponentHelper::getParams( 'com_falang' );
 	}
+
+	//Since Falang 2.2.2
+	//method use to set a language to be used during the translation loading
+	public static function setLanguageForUrlTranslation($language=null){
+		self::$languageForUrlTranslation = $language;
+	}
+
+	//Since Falang 2.2.2
+	//method use to get a language to be used during the translation loading
+	public static function getLanguageForUrlTranslation(){
+		return self::$languageForUrlTranslation;
+	}
+
 
 	public static function getInstance($adminPath=null){
 		if (!self::$instance) {

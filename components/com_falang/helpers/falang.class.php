@@ -39,6 +39,7 @@ class Falang {
 		return $rows;
 	}
 
+
 	/**
 	 * Translates a list of items
 	 * @param array $rows
@@ -140,6 +141,16 @@ class Falang {
 	public static function translateListWithIDs( &$rows, $ids, $reference_table, $language, $refTablePrimaryKey="id", & $tableArray, $querySQL, $allowfallback=true )
 	{
         $params = JComponentHelper::getParams('com_falang');
+
+		//v2.2.1
+		//use this to translate categories routes
+		if ($reference_table == 'categories'){
+			$jfm = FalangManager::getInstance();
+			$tmpLang = $jfm::getLanguageForUrlTranslation();
+			if (!empty($tmpLang)){
+				$language = $tmpLang;
+			}
+		}
 
 		//print " translateListWithIDs for ids=$ids refTablePrimaryKey=$refTablePrimaryKey<br>" ;
 		//$debug = $config->get("debug") == 1 ? true : false;

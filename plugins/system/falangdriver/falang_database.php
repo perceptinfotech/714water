@@ -186,7 +186,9 @@ class JFalangDatabase extends JOverrideDatabase {
                         break;
                     }
                 }
-                $ret[] = $fields[$key];
+				if(isset($key)){
+					$ret[] = $fields[$key];
+				}
             }
         }
 
