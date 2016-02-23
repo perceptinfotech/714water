@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Joom!Fish - Multi Lingual extention and translation manager for Joomla!
  * Copyright (C) 2003 - 2011, Think Network GmbH, Munich
