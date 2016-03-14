@@ -33,4 +33,3 @@ extract($displayData);
 <div class="modal-footer">
 	<?php echo $params['footer']; ?>
 </div>
-
