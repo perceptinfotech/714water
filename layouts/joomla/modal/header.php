@@ -38,3 +38,4 @@ extract($displayData);
 		<h3><?php echo $params['title']; ?></h3>
 	<?php endif; ?>
 </div>
+
