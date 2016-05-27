@@ -1,5 +1,4 @@
 <?php
-
 /*
  * PHP Encryption Library
  * Copyright (c) 2014, Taylor Hornby

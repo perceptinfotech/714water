@@ -13,9 +13,9 @@ use Joomla\Session\Storage;
 /**
  * APC session storage handler for PHP
  *
- * @see         http://www.php.net/manual/en/function.session-set-save-handler.php
- * @since       1.0
- * @deprecated  2.0  The Storage class chain will be removed.
+ * @see    http://www.php.net/manual/en/function.session-set-save-handler.php
+ * @since  1.0
+ * @deprecated  The joomla/session package is deprecated
  */
 class Apc extends Storage
 {
@@ -26,7 +26,6 @@ class Apc extends Storage
 	 *
 	 * @since   1.0
 	 * @throws  \RuntimeException
-	 * @deprecated  2.0
 	 */
 	public function __construct($options = array())
 	{
@@ -47,7 +46,6 @@ class Apc extends Storage
 	 * @return  string  The session data.
 	 *
 	 * @since   1.0
-	 * @deprecated  2.0
 	 */
 	public function read($id)
 	{
@@ -65,7 +63,6 @@ class Apc extends Storage
 	 * @return  boolean  True on success, false otherwise.
 	 *
 	 * @since   1.0
-	 * @deprecated  2.0
 	 */
 	public function write($id, $session_data)
 	{
@@ -82,7 +79,6 @@ class Apc extends Storage
 	 * @return  boolean  True on success, false otherwise.
 	 *
 	 * @since   1.0
-	 * @deprecated  2.0
 	 */
 	public function destroy($id)
 	{
@@ -97,7 +93,6 @@ class Apc extends Storage
 	 * @return boolean  True on success, false otherwise.
 	 *
 	 * @since   1.0
-	 * @deprecated  2.0
 	 */
 	public static function isSupported()
 	{

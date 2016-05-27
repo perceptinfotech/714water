@@ -14,18 +14,16 @@ use Joomla\Database\DatabaseDriver;
 /**
  * Database session storage handler for PHP
  *
- * @see         http://www.php.net/manual/en/function.session-set-save-handler.php
- * @since       1.0
- * @deprecated  2.0  The Storage class chain will be removed
+ * @see    http://www.php.net/manual/en/function.session-set-save-handler.php
+ * @since  1.0
+ * @deprecated  The joomla/session package is deprecated
  */
 class Database extends Storage
 {
 	/**
 	 * The DatabaseDriver to use when querying.
 	 *
-	 * @var    DatabaseDriver
-	 * @since  1.0
-	 * @deprecated  2.0
+	 * @var \Joomla\Database\DatabaseDriver
 	 */
 	protected $db;
 
@@ -36,7 +34,6 @@ class Database extends Storage
 	 *
 	 * @since   1.0
 	 * @throws  \RuntimeException
-	 * @deprecated  2.0
 	 */
 	public function __construct($options = array())
 	{
@@ -61,7 +58,6 @@ class Database extends Storage
 	 * @return  string  The session data.
 	 *
 	 * @since   1.0
-	 * @deprecated  2.0
 	 */
 	public function read($id)
 	{
@@ -92,7 +88,6 @@ class Database extends Storage
 	 * @return  boolean  True on success, false otherwise.
 	 *
 	 * @since   1.0
-	 * @deprecated  2.0
 	 */
 	public function write($id, $data)
 	{
@@ -131,7 +126,6 @@ class Database extends Storage
 	 * @return  boolean  True on success, false otherwise.
 	 *
 	 * @since   1.0
-	 * @deprecated  2.0
 	 */
 	public function destroy($id)
 	{
@@ -160,7 +154,6 @@ class Database extends Storage
 	 * @return  boolean  True on success, false otherwise.
 	 *
 	 * @since   1.0
-	 * @deprecated  2.0
 	 */
 	public function gc($lifetime = 1440)
 	{

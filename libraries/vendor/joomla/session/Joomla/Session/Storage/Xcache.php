@@ -13,8 +13,8 @@ use Joomla\Session\Storage;
 /**
  * XCache session storage handler
  *
- * @since       1.0
- * @deprecated  2.0  The Storage class chain will be removed
+ * @since  1.0
+ * @deprecated  The joomla/session package is deprecated
  */
 class Xcache extends Storage
 {
@@ -25,7 +25,6 @@ class Xcache extends Storage
 	 *
 	 * @since   1.0
 	 * @throws  \RuntimeException
-	 * @deprecated  2.0
 	 */
 	public function __construct($options = array())
 	{
@@ -45,7 +44,6 @@ class Xcache extends Storage
 	 * @return  string  The session data.
 	 *
 	 * @since   1.0
-	 * @deprecated  2.0
 	 */
 	public function read($id)
 	{
@@ -69,7 +67,6 @@ class Xcache extends Storage
 	 * @return  boolean  True on success, false otherwise.
 	 *
 	 * @since   1.0
-	 * @deprecated  2.0
 	 */
 	public function write($id, $session_data)
 	{
@@ -86,7 +83,6 @@ class Xcache extends Storage
 	 * @return  boolean  True on success, false otherwise.
 	 *
 	 * @since   1.0
-	 * @deprecated  2.0
 	 */
 	public function destroy($id)
 	{
@@ -103,10 +99,9 @@ class Xcache extends Storage
 	/**
 	 * Test to see if the SessionHandler is available.
 	 *
-	 * @return  boolean  True on success, false otherwise.
+	 * @return boolean  True on success, false otherwise.
 	 *
 	 * @since   1.0
-	 * @deprecated  2.0
 	 */
 	static public function isSupported()
 	{

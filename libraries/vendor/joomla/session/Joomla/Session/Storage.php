@@ -13,16 +13,16 @@ use Joomla\Filter\InputFilter;
 /**
  * Custom session storage handler for PHP
  *
- * @see         http://www.php.net/manual/en/function.session-set-save-handler.php
- * @since       1.0
- * @deprecated  2.0  The Storage class chain will be removed.
+ * @see    http://www.php.net/manual/en/function.session-set-save-handler.php
+ * @todo   When dropping compatibility with PHP 5.3 use the SessionHandlerInterface and the SessionHandler class
+ * @since  1.0
+ * @deprecated  The joomla/session package is deprecated
  */
 abstract class Storage
 {
 	/**
-	 * @var    Storage[]  Storage instances container.
+	 * @var    array  JSessionStorage instances container.
 	 * @since  1.0
-	 * @deprecated  2.0
 	 */
 	protected static $instances = array();
 
@@ -32,7 +32,6 @@ abstract class Storage
 	 * @param   array  $options  Optional parameters.
 	 *
 	 * @since   1.0
-	 * @deprecated  2.0
 	 */
 	public function __construct($options = array())
 	{
@@ -48,7 +47,6 @@ abstract class Storage
 	 * @return  Storage
 	 *
 	 * @since   1.0
-	 * @deprecated  2.0
 	 */
 	public static function getInstance($name = 'none', $options = array())
 	{
@@ -86,7 +84,6 @@ abstract class Storage
 	 * @return  void
 	 *
 	 * @since   1.0
-	 * @deprecated  2.0
 	 */
 	public function register()
 	{
@@ -106,7 +103,6 @@ abstract class Storage
 	 * @return  boolean  True on success, false otherwise.
 	 *
 	 * @since   1.0
-	 * @deprecated  2.0
 	 */
 	public function open($save_path, $session_name)
 	{
@@ -119,7 +115,6 @@ abstract class Storage
 	 * @return  boolean  True on success, false otherwise.
 	 *
 	 * @since   1.0
-	 * @deprecated  2.0
 	 */
 	public function close()
 	{
@@ -135,7 +130,6 @@ abstract class Storage
 	 * @return  string  The session data.
 	 *
 	 * @since   1.0
-	 * @deprecated  2.0
 	 */
 	public function read($id)
 	{
@@ -151,7 +145,6 @@ abstract class Storage
 	 * @return  boolean  True on success, false otherwise.
 	 *
 	 * @since   1.0
-	 * @deprecated  2.0
 	 */
 	public function write($id, $session_data)
 	{
@@ -167,7 +160,6 @@ abstract class Storage
 	 * @return  boolean  True on success, false otherwise.
 	 *
 	 * @since   1.0
-	 * @deprecated  2.0
 	 */
 	public function destroy($id)
 	{
@@ -182,7 +174,6 @@ abstract class Storage
 	 * @return  boolean  True on success, false otherwise.
 	 *
 	 * @since   1.0
-	 * @deprecated  2.0
 	 */
 	public function gc($maxlifetime = null)
 	{
@@ -195,7 +186,6 @@ abstract class Storage
 	 * @return  boolean  True on success, false otherwise.
 	 *
 	 * @since   1.0
-	 * @deprecated  2.0
 	 */
 	public static function isSupported()
 	{

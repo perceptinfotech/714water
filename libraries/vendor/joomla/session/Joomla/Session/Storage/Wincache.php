@@ -13,8 +13,8 @@ use Joomla\Session\Storage;
 /**
  * WINCACHE session storage handler for PHP
  *
- * @since       1.0
- * @deprecated  2.0  The Storage class chain will be removed
+ * @since  1.0
+ * @deprecated  The joomla/session package is deprecated
  */
 class Wincache extends Storage
 {
@@ -25,7 +25,6 @@ class Wincache extends Storage
 	 *
 	 * @since   1.0
 	 * @throws  \RuntimeException
-	 * @deprecated  2.0
 	 */
 	public function __construct($options = array())
 	{
@@ -43,7 +42,6 @@ class Wincache extends Storage
 	 * @return  void
 	 *
 	 * @since   1.0
-	 * @deprecated  2.0
 	 */
 	public function register()
 	{
@@ -53,10 +51,9 @@ class Wincache extends Storage
 	/**
 	 * Test to see if the SessionHandler is available.
 	 *
-	 * @return  boolean  True on success, false otherwise.
+	 * @return boolean  True on success, false otherwise.
 	 *
 	 * @since   1.0
-	 * @deprecated  2.0
 	 */
 	static public function isSupported()
 	{
